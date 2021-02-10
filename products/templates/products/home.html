@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+<div class="row">
+    <div class="col-md-10 mx-auto">
+
+    {% for item in products.all %}
+        <div class="card card-body"
+        onclick="window.location='{% url 'detail' item.id %}';"
+        style="cursor: pointer;"
+        >
+            <div class="row p-2">
+                <div class="col-md-2">
+                    <img class="img img-fluid" width="100" height="100" src="{{ item.icon.url }}" alt="">
+                </div>
+                <div class="col-md-8 text-left">
+                    <a href="{% url 'detail' item.id %}">
+                        <h4>{{ item.title }}</h4>
+                    </a>
+                    <p>{{ item.summary }}</p>
+                </div>
+                <div class="col-md-2 text-center bg-light border rounded-3 p-1">
+                    <div class="pt-2">
+                        <p>{{ item.votes_total }}</p>
+                        <a href="javascript:{document.getElementById('upvote{{ item.id }}').submit()}">
+                                <i class="fas fa-arrow-up fa-2x"></i>
+                                <p>Upvote</p>
+                        </a>
+                    </div>
+                </div>
+                <!-- 3 cols: icon left=1, title w/summary below=7, up votes right=1-->
+            </div>
+        </div>
+        <!-- handler for upvoting -->
+        <form id="upvote{{ item.id }}" action="{% url 'upvote' item.id %}" method="POST">
+            {% csrf_token %}
+            <input type="hidden">
+        </form>
+    {% endfor %}
+
+    </div>
+</div>
+
+
+{% endblock %}
